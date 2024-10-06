@@ -5,3 +5,7 @@
 In addition to habit tracking, EditorialChain focuses on improving users' vocabulary, comprehension, and overall knowledge by encouraging daily reading of educational content. It offers AI-driven insights and suggestions to make the reading experience more effective for exam preparation and personal development.
 
 This project is designed to be open-source and is expected to evolve over the course of a year, with development beginning during Hacktoberfest.
+
+## Repository
+
+![EditorialChain Logo](logo.png)
