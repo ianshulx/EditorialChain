@@ -6,6 +6,5 @@ In addition to habit tracking, EditorialChain focuses on improving users' vocabu
 
 This project is designed to be open-source and is expected to evolve over the course of a year, with development beginning during Hacktoberfest.
 
-## Repository
 
 ![EditorialChain Logo](logo.png)
