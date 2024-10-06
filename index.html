@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>EditorialChain</title>
+    <style>
+        body {
+            background-color: #E4E2DD;
+            font-family: Arial, sans-serif;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        /* Navbar styles */
+        .navbar {
+            background-color: #06402B;
+            overflow: hidden;
+            padding: 10px 0;
+        }
+        .navbar img {
+            height: 50px;
+            float: left;
+            margin-left: 20px;
+        }
+        .navbar h1 {
+            color: #DB4A2B;
+            float: left;
+            margin: 0;
+            padding-left: 15px;
+            line-height: 50px;
+        }
+
+        /* Content styles */
+        .content {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        h1 {
+            color: #DB4A2B;
+            margin-top: 50px;
+            animation: fadeIn 2s ease-in-out;
+        }
+        h2 {
+            color: #06402B;
+            margin-top: 20px;
+            animation: slideIn 2s ease-in-out;
+        }
+        p {
+            color: black;
+            text-align: center;
+            margin: 20px auto;
+            width: 80%;
+            animation: fadeInUp 3s ease-in-out;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes slideIn {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="logobg.png" alt="EditorialChain Logo">
+        <!-- <h1></h1> -->
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h1>Welcome to EditorialChain</h1>
+        <h2>Building Reading Habits for Students</h2>
+        <p>
+            EditorialChain is an AI-based, streak-focused platform designed to help students and exam aspirants
+            (UPSC, SSC, bank exams, etc.) develop consistent reading habits. Through personalized recommendations,
+            streak tracking, and vocabulary-building exercises, EditorialChain aims to make learning efficient and fun.
+        </p>
+        <p>
+            Our mission is to create a user-friendly platform that helps students stay on track with their reading,
+            while improving vocabulary, comprehension, and general knowledge by reading educational content.
+        </p>
+    </div>
+
+</body>
+</html>
