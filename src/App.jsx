@@ -73,8 +73,22 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <Navbar />
+      <main className="min-h-screen bg-gray-50">
+        <Routes>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/article" element={<DailyArticlePage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/collaborators" element={<CollaboratorPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+      <Footer />
     </BrowserRouter>
   );
 }
+
 export default App;
