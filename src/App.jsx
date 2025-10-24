@@ -18,7 +18,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<DashboardPage />} />
                     <Route path="/article" element={<DailyArticlePage />} />
-                    <Route path="/leaderboard" element={<LeaderDailychain />} />
+                    <Route path="/leaderboard" element={<LeaderboardPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/collaborators" element={<CollaboratorPage />} />
