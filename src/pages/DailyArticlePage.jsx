@@ -65,12 +65,8 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
     }, [isReading]);
 
     useEffect(() => {
-        if (article) {
-            setIsReading(true);
-        }
-        return () => {
-            setIsReading(false);
-        };
+        if (article) setIsReading(true);
+        return () => setIsReading(false);
     }, [article]);
 
     useEffect(() => {
@@ -81,7 +77,6 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
             const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
             setReadingProgress(Math.min(progress, 100));
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -94,7 +89,6 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
 
     const highlightVocabulary = (text) => {
         if (!showVocabulary) return text;
-        
         let highlightedText = text;
         Object.keys(vocabularyWords).forEach(word => {
             const regex = new RegExp(`\\b${word}\\b`, 'gi');
@@ -119,37 +113,31 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
         setIsBookmarked(!isBookmarked);
         const bookmarks = JSON.parse(localStorage.getItem('bookmarked_articles') || '[]');
         if (!isBookmarked) {
-            bookmarks.push({
-                title: article.title,
-                date: article.date,
-                source: article.source
-            });
-            localStorage.setItem('bookmarked_articles', JSON.stringify(bookmarks));
+            bookmarks.push({ title: article.title, date: article.date, source: article.source });
         } else {
             const filtered = bookmarks.filter(b => b.title !== article.title);
             localStorage.setItem('bookmarked_articles', JSON.stringify(filtered));
+            return;
         }
+        localStorage.setItem('bookmarked_articles', JSON.stringify(bookmarks));
     };
 
     const shareArticle = (platform) => {
         const url = window.location.href;
         const text = `Check out this article: ${article.title}`;
-        
         const shareUrls = {
             twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
             facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
             linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
             whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`
         };
-
         if (platform === 'copy') {
             navigator.clipboard.writeText(url);
             alert('Link copied to clipboard!');
-            setShowShareMenu(false);
         } else {
             window.open(shareUrls[platform], '_blank', 'width=600,height=400');
-            setShowShareMenu(false);
         }
+        setShowShareMenu(false);
     };
 
     if (loading) {
@@ -170,26 +158,26 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
             </div>
 
             <div className="max-w-4xl mx-auto px-4 py-8">
+                {/* Category Filter */}
                 <div className="bg-white rounded-lg shadow-md p-4 mb-6">
                     <h3 className="text-sm font-semibold text-gray-600 mb-3">Filter by Category</h3>
                     <div className="flex flex-wrap gap-2">
-                        {categories.map(category => (
+                        {categories.map(cat => (
                             <button
-                                key={category.id}
-                                onClick={() => setSelectedCategory(category.id)}
+                                key={cat.id}
+                                onClick={() => setSelectedCategory(cat.id)}
                                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                                    selectedCategory === category.id
-                                        ? 'bg-blue-600 text-white shadow-md'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    selectedCategory === cat.id ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
-                                <span className="mr-2">{category.icon}</span>
-                                {category.name}
+                                <span className="mr-2">{cat.icon}</span>
+                                {cat.name}
                             </button>
                         ))}
                     </div>
                 </div>
 
+                {/* Reading Time */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,16 +190,13 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
                     </div>
                     <button
                         onClick={() => setIsReading(!isReading)}
-                        className={`px-4 py-2 rounded-lg font-medium ${
-                            isReading 
-                                ? 'bg-red-500 text-white hover:bg-red-600' 
-                                : 'bg-green-500 text-white hover:bg-green-600'
-                        }`}
+                        className={`px-4 py-2 rounded-lg font-medium ${isReading ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'}`}
                     >
                         {isReading ? 'Pause' : 'Resume'}
                     </button>
                 </div>
 
+                {/* Vocabulary Toggle */}
                 <div className="bg-white rounded-lg shadow p-4 mb-6 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                         <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,93 +206,62 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
                     </div>
                     <button
                         onClick={() => setShowVocabulary(!showVocabulary)}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            showVocabulary ? 'bg-blue-600' : 'bg-gray-300'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showVocabulary ? 'bg-blue-600' : 'bg-gray-300'}`}
                     >
-                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            showVocabulary ? 'translate-x-6' : 'translate-x-1'
-                        }`} />
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showVocabulary ? 'translate-x-6' : 'translate-x-1'}`} />
                     </button>
                 </div>
 
+                {/* Vocabulary Modal */}
                 {selectedWord && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                         <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <h3 className="text-2xl font-bold text-gray-900 capitalize">{selectedWord.word}</h3>
-                                <button
-                                    onClick={() => setSelectedWord(null)}
-                                    className="text-gray-400 hover:text-gray-600"
-                                >
+                                <button onClick={() => setSelectedWord(null)} className="text-gray-400 hover:text-gray-600">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
                             <p className="text-gray-700 leading-relaxed">{selectedWord.definition}</p>
-                            <button
-                                onClick={() => setSelectedWord(null)}
-                                className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-                            >
+                            <button onClick={() => setSelectedWord(null)} className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
                                 Got it!
                             </button>
                         </div>
                     </div>
                 )}
 
+                {/* Article */}
                 <div className="bg-white rounded-lg shadow-lg p-8">
                     <div className="border-b pb-6 mb-6">
                         <div className="flex justify-between items-start mb-4">
-                            <h1 className="text-4xl font-bold text-gray-900 flex-1">
-                                {article.title}
-                            </h1>
+                            <h1 className="text-4xl font-bold text-gray-900 flex-1">{article.title}</h1>
                             <div className="flex gap-2 ml-4">
-                                <button
-                                    onClick={toggleBookmark}
-                                    className="p-3 rounded-full hover:bg-gray-100 transition-colors"
-                                    title={isBookmarked ? 'Remove bookmark' : 'Bookmark article'}
-                                >
+                                {/* Bookmark */}
+                                <button onClick={toggleBookmark} className="p-3 rounded-full hover:bg-gray-100 transition-colors" title={isBookmarked ? 'Remove bookmark' : 'Bookmark article'}>
                                     {isBookmarked ? (
-                                        <svg className="w-6 h-6 text-yellow-500 fill-current" viewBox="0 0 24 24">
-                                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-                                        </svg>
+                                        <svg className="w-6 h-6 text-yellow-500 fill-current" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
                                     ) : (
-                                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                                        </svg>
+                                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                                     )}
                                 </button>
 
+                                {/* Share */}
                                 <div className="relative">
-                                    <button
-                                        onClick={() => setShowShareMenu(!showShareMenu)}
-                                        className="p-3 rounded-full hover:bg-gray-100 transition-colors"
-                                        title="Share article"
-                                    >
+                                    <button onClick={() => setShowShareMenu(!showShareMenu)} className="p-3 rounded-full hover:bg-gray-100 transition-colors" title="Share article">
                                         <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                                         </svg>
                                     </button>
-
                                     {showShareMenu && (
                                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-10">
-                                            <button onClick={() => shareArticle('twitter')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
-                                                <span className="mr-2">🐦</span>Twitter
-                                            </button>
-                                            <button onClick={() => shareArticle('facebook')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
-                                                <span className="mr-2">📘</span>Facebook
-                                            </button>
-                                            <button onClick={() => shareArticle('linkedin')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
-                                                <span className="mr-2">💼</span>LinkedIn
-                                            </button>
-                                            <button onClick={() => shareArticle('whatsapp')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
-                                                <span className="mr-2">💬</span>WhatsApp
-                                            </button>
+                                            <button onClick={() => shareArticle('twitter')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"><span className="mr-2">🐦</span>Twitter</button>
+                                            <button onClick={() => shareArticle('facebook')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"><span className="mr-2">📘</span>Facebook</button>
+                                            <button onClick={() => shareArticle('linkedin')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"><span className="mr-2">💼</span>LinkedIn</button>
+                                            <button onClick={() => shareArticle('whatsapp')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"><span className="mr-2">💬</span>WhatsApp</button>
                                             <hr className="my-2"/>
-                                            <button onClick={() => shareArticle('copy')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
-                                                <span className="mr-2">📋</span>Copy Link
-                                            </button>
+                                            <button onClick={() => shareArticle('copy')} className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"><span className="mr-2">📋</span>Copy Link</button>
                                         </div>
                                     )}
                                 </div>
@@ -323,12 +277,8 @@ Looking ahead, the future of AI in education appears promising. With thoughtful 
                     </div>
 
                     <div className="prose prose-lg max-w-none" onClick={handleWordClick}>
-                        {article.content.split('\n\n').map((paragraph, index) => (
-                            <p 
-                                key={index} 
-                                className="text-gray-700 leading-relaxed mb-4"
-                                dangerouslySetInnerHTML={{ __html: highlightVocabulary(paragraph) }}
-                            />
+                        {article.content.split('\n\n').map((para, idx) => (
+                            <p key={idx} className="text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: highlightVocabulary(para) }} />
                         ))}
                     </div>
                 </div>
